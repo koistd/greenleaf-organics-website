@@ -1,159 +1,117 @@
 /* ==========================================================================
-   GreenLeaf Organics - Main JavaScript
-   ICT726 Web Development Assignment
+   GreenLeaf Organics – script.js
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Cart state — persisted in localStorage so it survives page navigation
-   -------------------------------------------------------------------------- */
+/* ---------- Cart state (localStorage) ---------- */
 let cart = JSON.parse(localStorage.getItem('gl_cart') || '[]');
+function saveCart() { localStorage.setItem('gl_cart', JSON.stringify(cart)); }
 
-function saveCart() {
-  localStorage.setItem('gl_cart', JSON.stringify(cart));
-}
-
-/* --------------------------------------------------------------------------
-   Boot
-   -------------------------------------------------------------------------- */
+/* ---------- Boot ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  buildCartUI();
+  renderCartDrawer();
+  updateCartBadge();
   initNav();
   setActiveNav();
-  injectCartUI();       // cart icon in header + drawer in body
-  renderCartDrawer();   // populate drawer from saved state
-  initAddToCart();      // wire up all "Add to Cart" buttons
-  initProductModals();  // product detail modal on card click
+  initAddToCart();
+  initProductModals();
   initProductFilter();
   initGalleryLightbox();
   initContactForm();
 });
 
-/* --------------------------------------------------------------------------
-   Navigation: mobile hamburger toggle
-   -------------------------------------------------------------------------- */
-function initNav() {
-  const toggle = document.querySelector('.nav-toggle');
-  const nav    = document.querySelector('.site-nav');
-  if (!toggle || !nav) return;
-
-  toggle.addEventListener('click', () => {
-    const isOpen = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', isOpen);
-  });
-
-  nav.querySelectorAll('a').forEach(link =>
-    link.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    })
-  );
-}
-
-/* --------------------------------------------------------------------------
-   Active nav link
-   -------------------------------------------------------------------------- */
-function setActiveNav() {
-  const page = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-list a').forEach(link => {
-    const href = link.getAttribute('href');
-    if (href === page || (page === '' && href === 'index.html')) {
-      link.classList.add('active');
-      link.setAttribute('aria-current', 'page');
-    }
-  });
-}
-
-/* ==========================================================================
-   CART SYSTEM
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   Inject cart icon button into header nav + cart drawer into body
-   -------------------------------------------------------------------------- */
-function injectCartUI() {
-  // --- Cart icon in nav ---
-  const nav = document.querySelector('.header-inner');
-  if (nav && !document.getElementById('cart-btn')) {
+/* ==========================================================
+   HEADER CART ICON + SLIDE DRAWER + PRODUCT MODAL (injected)
+   ========================================================== */
+function buildCartUI() {
+  /* --- Cart icon button in header --- */
+  const headerInner = document.querySelector('.header-inner');
+  if (headerInner && !document.getElementById('cart-btn')) {
     const btn = document.createElement('button');
-    btn.id = 'cart-btn';
+    btn.id        = 'cart-btn';
     btn.className = 'cart-btn';
     btn.setAttribute('aria-label', 'Open shopping cart');
-    btn.innerHTML = `
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-      </svg>
-      <span class="cart-badge" id="cart-badge">0</span>`;
+    btn.innerHTML =
+      `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+         <circle cx="9"  cy="21" r="1"/>
+         <circle cx="20" cy="21" r="1"/>
+         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+       </svg>
+       <span class="cart-badge" id="cart-badge" aria-label="items in cart">0</span>`;
     btn.addEventListener('click', openCart);
-    nav.appendChild(btn);
+    headerInner.appendChild(btn);
   }
 
-  // --- Cart drawer ---
-  if (!document.getElementById('cart-drawer')) {
-    document.body.insertAdjacentHTML('beforeend', `
-      <div id="cart-overlay" class="cart-overlay" aria-hidden="true"></div>
-      <aside id="cart-drawer" class="cart-drawer" role="dialog"
-             aria-modal="true" aria-label="Shopping cart" aria-hidden="true">
-        <div class="cart-header">
-          <h2>🛒 Your Cart</h2>
-          <button id="cart-close" class="cart-close" aria-label="Close cart">&times;</button>
-        </div>
-        <div id="cart-items" class="cart-items"></div>
-        <div class="cart-footer">
-          <div class="cart-total-row">
-            <span>Subtotal</span>
-            <span id="cart-subtotal">$0.00</span>
-          </div>
-          <div class="cart-total-row cart-total-main">
-            <span>Total</span>
-            <span id="cart-total">$0.00</span>
-          </div>
-          <p class="cart-delivery-note">🚚 Free delivery on orders over $50</p>
-          <a href="cart.html" class="btn btn-outline" style="width:100%;margin-top:0.5rem;text-align:center;display:block"
-             onclick="closeCart()">View Full Cart</a>
-          <button class="btn btn-primary" style="width:100%;margin-top:0.75rem"
-                  id="checkout-btn">Proceed to Checkout</button>
-          <button class="btn btn-outline" style="width:100%;margin-top:0.75rem"
-                  id="clear-cart-btn">Clear Cart</button>
-        </div>
-      </aside>
+  /* --- Drawer + product modal + toast (once per page) --- */
+  if (document.getElementById('cart-drawer')) return;
 
-      <!-- Product Detail Modal -->
-      <div id="product-modal" class="product-modal-overlay" aria-hidden="true" role="dialog"
-           aria-modal="true" aria-label="Product details">
-        <div class="product-modal-content">
-          <button class="product-modal-close" id="product-modal-close" aria-label="Close">&times;</button>
-          <div id="product-modal-body"></div>
-        </div>
+  document.body.insertAdjacentHTML('beforeend', `
+    <!-- dark overlay -->
+    <div id="cart-overlay" class="cart-overlay"></div>
+
+    <!-- slide-in cart drawer -->
+    <aside id="cart-drawer" class="cart-drawer"
+           role="dialog" aria-modal="true" aria-label="Shopping cart" aria-hidden="true">
+      <div class="cart-header">
+        <h2>🛒 Your Cart</h2>
+        <button id="cart-close" class="cart-close" aria-label="Close cart">&times;</button>
       </div>
+      <div id="cart-items" class="cart-items"></div>
+      <div class="cart-footer">
+        <div class="cart-total-row">
+          <span>Subtotal</span><span id="cart-subtotal">$0.00</span>
+        </div>
+        <div class="cart-total-row cart-total-main">
+          <span>Total</span><span id="cart-total">$0.00</span>
+        </div>
+        <p class="cart-delivery-note" id="cart-delivery-note">🚚 Free delivery on orders over $50</p>
+        <a href="cart.html" class="btn btn-outline"
+           style="width:100%;text-align:center;display:block;margin-top:0.5rem"
+           onclick="closeCart()">View Full Cart</a>
+        <button class="btn btn-primary" id="checkout-btn"
+                style="width:100%;margin-top:0.75rem">Proceed to Checkout</button>
+        <button class="btn btn-outline" id="clear-cart-btn"
+                style="width:100%;margin-top:0.5rem">Clear Cart</button>
+      </div>
+    </aside>
 
-      <!-- Toast notification -->
-      <div id="cart-toast" class="cart-toast" aria-live="polite" aria-atomic="true"></div>
-    `);
+    <!-- product detail modal -->
+    <div id="product-modal" class="product-modal-overlay"
+         role="dialog" aria-modal="true" aria-label="Product details" aria-hidden="true">
+      <div class="product-modal-content">
+        <button id="product-modal-close" class="product-modal-close" aria-label="Close">&times;</button>
+        <div id="product-modal-body"></div>
+      </div>
+    </div>
 
-    document.getElementById('cart-close').addEventListener('click', closeCart);
-    document.getElementById('cart-overlay').addEventListener('click', closeCart);
-    document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
-    document.getElementById('checkout-btn').addEventListener('click', handleCheckout);
-    document.getElementById('product-modal-close').addEventListener('click', closeProductModal);
-    document.getElementById('product-modal').addEventListener('click', e => {
-      if (e.target.id === 'product-modal') closeProductModal();
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeCart(); closeProductModal(); }
-    });
-  }
+    <!-- toast -->
+    <div id="cart-toast" class="cart-toast" role="status" aria-live="polite"></div>
+  `);
 
-  updateCartBadge();
+  document.getElementById('cart-close').addEventListener('click', closeCart);
+  document.getElementById('cart-overlay').addEventListener('click', closeCart);
+  document.getElementById('clear-cart-btn').addEventListener('click', () => { clearCart(); });
+  document.getElementById('checkout-btn').addEventListener('click', () => {
+    window.location.href = 'cart.html';
+  });
+  document.getElementById('product-modal-close').addEventListener('click', closeProductModal);
+  document.getElementById('product-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('product-modal')) closeProductModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeCart(); closeProductModal(); }
+  });
 }
 
+/* ---------- Cart open / close ---------- */
 function openCart() {
   document.getElementById('cart-drawer').classList.add('open');
   document.getElementById('cart-drawer').setAttribute('aria-hidden', 'false');
   document.getElementById('cart-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
 function closeCart() {
   document.getElementById('cart-drawer').classList.remove('open');
   document.getElementById('cart-drawer').setAttribute('aria-hidden', 'true');
@@ -161,29 +119,22 @@ function closeCart() {
   document.body.style.overflow = '';
 }
 
-/* --------------------------------------------------------------------------
-   Add to Cart — wire up all buttons on the page
-   -------------------------------------------------------------------------- */
+/* ---------- Add to Cart buttons ---------- */
 function initAddToCart() {
-  document.querySelectorAll('.btn-add-to-cart, [aria-label^="Add "]').forEach(btn => {
-    // avoid double-binding
-    if (btn.dataset.cartBound) return;
-    btn.dataset.cartBound = '1';
-
+  document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
+    if (btn.dataset.bound) return;
+    btn.dataset.bound = '1';
     btn.addEventListener('click', e => {
-      e.stopPropagation(); // don't open product modal
+      e.stopPropagation();
       const card = btn.closest('.product-card');
       if (!card) return;
-
-      const id    = card.dataset.id;
-      const name  = card.querySelector('h3').textContent.trim();
-      const price = parseFloat(card.dataset.price);
-      const img   = card.querySelector('img').src;
-      const unit  = card.dataset.unit || '';
-
-      addToCart({ id, name, price, img, unit });
-
-      // Button feedback
+      addToCart({
+        id:    card.dataset.id,
+        name:  card.querySelector('h3').textContent.trim(),
+        price: parseFloat(card.dataset.price),
+        img:   card.querySelector('img').src,
+        unit:  card.dataset.unit || ''
+      });
       btn.textContent = '✓ Added!';
       btn.disabled = true;
       setTimeout(() => { btn.textContent = 'Add to Cart'; btn.disabled = false; }, 1500);
@@ -193,11 +144,7 @@ function initAddToCart() {
 
 function addToCart(product) {
   const existing = cart.find(i => i.id === product.id);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
+  existing ? existing.qty++ : cart.push({ ...product, qty: 1 });
   saveCart();
   renderCartDrawer();
   updateCartBadge();
@@ -206,9 +153,7 @@ function addToCart(product) {
 
 function removeFromCart(id) {
   cart = cart.filter(i => i.id !== id);
-  saveCart();
-  renderCartDrawer();
-  updateCartBadge();
+  saveCart(); renderCartDrawer(); updateCartBadge();
 }
 
 function changeQty(id, delta) {
@@ -220,19 +165,15 @@ function changeQty(id, delta) {
 }
 
 function clearCart() {
-  cart = [];
-  saveCart();
-  renderCartDrawer();
-  updateCartBadge();
+  cart = []; saveCart(); renderCartDrawer(); updateCartBadge();
 }
 
-/* --------------------------------------------------------------------------
-   Render cart drawer contents
-   -------------------------------------------------------------------------- */
+/* ---------- Render cart drawer ---------- */
 function renderCartDrawer() {
   const container = document.getElementById('cart-items');
   const totalEl   = document.getElementById('cart-total');
   const subEl     = document.getElementById('cart-subtotal');
+  const noteEl    = document.getElementById('cart-delivery-note');
   if (!container) return;
 
   if (cart.length === 0) {
@@ -240,102 +181,89 @@ function renderCartDrawer() {
       <div class="cart-empty">
         <span style="font-size:3rem">🛒</span>
         <p>Your cart is empty</p>
-        <a href="products.html" class="btn btn-primary" style="margin-top:1rem"
-           onclick="closeCart()">Shop Now</a>
+        <a href="products.html" class="btn btn-primary" style="margin-top:1rem" onclick="closeCart()">Shop Now</a>
       </div>`;
-    totalEl.textContent = '$0.00';
-    subEl.textContent   = '$0.00';
+    if (totalEl) totalEl.textContent = '$0.00';
+    if (subEl)   subEl.textContent   = '$0.00';
     return;
   }
 
   container.innerHTML = cart.map(item => `
-    <div class="cart-item" data-id="${item.id}">
+    <div class="cart-item">
       <img src="${item.img}" alt="${item.name}" class="cart-item-img" />
       <div class="cart-item-info">
         <p class="cart-item-name">${item.name}</p>
         <p class="cart-item-price">$${item.price.toFixed(2)} ${item.unit}</p>
         <div class="qty-controls">
-          <button class="qty-btn" onclick="changeQty('${item.id}', -1)" aria-label="Decrease quantity">−</button>
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)" aria-label="Decrease">−</button>
           <span class="qty-value">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty('${item.id}', 1)"  aria-label="Increase quantity">+</button>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)"  aria-label="Increase">+</button>
         </div>
       </div>
       <div class="cart-item-right">
         <p class="cart-item-total">$${(item.price * item.qty).toFixed(2)}</p>
-        <button class="cart-remove" onclick="removeFromCart('${item.id}')" aria-label="Remove ${item.name}">🗑</button>
+        <button class="cart-remove" onclick="removeFromCart('${item.id}')" aria-label="Remove">🗑</button>
       </div>
     </div>`).join('');
 
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const delivery = subtotal >= 50 ? 0 : 5.99;
-  subEl.textContent = `$${subtotal.toFixed(2)}`;
-  totalEl.textContent = `$${(subtotal + delivery).toFixed(2)}`;
-
-  // Update delivery note
-  const note = document.querySelector('.cart-delivery-note');
-  if (note) note.textContent = delivery === 0
+  if (subEl)   subEl.textContent   = `$${subtotal.toFixed(2)}`;
+  if (totalEl) totalEl.textContent = `$${(subtotal + delivery).toFixed(2)}`;
+  if (noteEl)  noteEl.textContent  = delivery === 0
     ? '✅ Free delivery applied!'
     : `🚚 Add $${(50 - subtotal).toFixed(2)} more for free delivery`;
 }
 
-/* --------------------------------------------------------------------------
-   Cart badge count
-   -------------------------------------------------------------------------- */
+/* ---------- Badge ---------- */
 function updateCartBadge() {
   const badge = document.getElementById('cart-badge');
   if (!badge) return;
   const total = cart.reduce((s, i) => s + i.qty, 0);
-  badge.textContent = total;
-  badge.style.display = total > 0 ? 'flex' : 'none';
+  badge.textContent    = total;
+  badge.style.display  = total > 0 ? 'flex' : 'none';
 }
 
-/* --------------------------------------------------------------------------
-   Toast notification
-   -------------------------------------------------------------------------- */
+/* ---------- Toast ---------- */
 function showToast(msg) {
-  const toast = document.getElementById('cart-toast');
-  if (!toast) return;
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
+  const t = document.getElementById('cart-toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-/* --------------------------------------------------------------------------
-   Checkout (demo)
-   -------------------------------------------------------------------------- */
-function handleCheckout() {
-  if (cart.length === 0) return;
-  closeCart();
-  showToast('🎉 Order placed! Thank you for shopping with GreenLeaf.');
-  clearCart();
-}
-
-/* ==========================================================================
+/* ==========================================================
    PRODUCT DETAIL MODAL
-   ========================================================================== */
+   ========================================================== */
 function initProductModals() {
   document.querySelectorAll('.product-card').forEach(card => {
     card.style.cursor = 'pointer';
     card.addEventListener('click', e => {
-      // Don't open modal if clicking the Add to Cart button
-      if (e.target.closest('.btn-add-to-cart') || e.target.closest('[aria-label^="Add "]')) return;
+      if (e.target.closest('.btn-add-to-cart')) return;
       openProductModal(card);
     });
   });
 }
 
 function openProductModal(card) {
-  const name     = card.querySelector('h3').textContent;
-  const price    = card.dataset.price;
-  const unit     = card.dataset.unit || '';
-  const img      = card.querySelector('img').src;
-  const alt      = card.querySelector('img').alt;
-  const desc     = card.querySelector('.product-desc')?.textContent || '';
-  const badge    = card.querySelector('.product-category-badge')?.textContent || '';
-  const id       = card.dataset.id;
-  const details  = card.dataset.details || '';
+  const id      = card.dataset.id    || '';
+  const name    = card.querySelector('h3').textContent.trim();
+  const price   = parseFloat(card.dataset.price) || 0;
+  const unit    = card.dataset.unit  || '';
+  const img     = card.querySelector('img').src;
+  const alt     = card.querySelector('img').alt;
+  const desc    = card.querySelector('.product-desc')?.textContent.trim() || '';
+  const badge   = card.querySelector('.product-category-badge')?.textContent.trim() || '';
+  /* data-details stores HTML-escaped text — decode it */
+  const rawDetails = card.getAttribute('data-details') || '';
+  const details = rawDetails
+    .replace(/&lt;/g,  '<')
+    .replace(/&gt;/g,  '>')
+    .replace(/&amp;/g, '&');
 
-  document.getElementById('product-modal-body').innerHTML = `
+  const body = document.getElementById('product-modal-body');
+  body.innerHTML = `
     <div class="pmodal-grid">
       <div class="pmodal-img-wrap">
         <img src="${img}" alt="${alt}" />
@@ -343,7 +271,7 @@ function openProductModal(card) {
       <div class="pmodal-info">
         <span class="product-category-badge">${badge}</span>
         <h2>${name}</h2>
-        <p class="pmodal-price">$${parseFloat(price).toFixed(2)} <span>${unit}</span></p>
+        <p class="pmodal-price">$${price.toFixed(2)} <span>${unit}</span></p>
         <p class="pmodal-desc">${desc}</p>
         ${details ? `<div class="pmodal-details">${details}</div>` : ''}
         <div class="pmodal-meta">
@@ -356,134 +284,145 @@ function openProductModal(card) {
           <span class="qty-value" id="modal-qty">1</span>
           <button class="qty-btn" id="modal-qty-inc">+</button>
         </div>
-        <button class="btn btn-primary pmodal-add-btn" style="width:100%;margin-top:1rem"
-                data-id="${id}">Add to Cart 🛒</button>
+        <button class="btn btn-primary" id="modal-add-btn"
+                style="width:100%;margin-top:1rem">Add to Cart 🛒</button>
       </div>
     </div>`;
 
-  // Qty controls inside modal
   let qty = 1;
-  document.getElementById('modal-qty-dec').addEventListener('click', () => {
+  document.getElementById('modal-qty-dec').onclick = () => {
     if (qty > 1) { qty--; document.getElementById('modal-qty').textContent = qty; }
-  });
-  document.getElementById('modal-qty-inc').addEventListener('click', () => {
+  };
+  document.getElementById('modal-qty-inc').onclick = () => {
     qty++; document.getElementById('modal-qty').textContent = qty;
-  });
-
-  document.querySelector('.pmodal-add-btn').addEventListener('click', () => {
-    for (let i = 0; i < qty; i++) {
-      addToCart({ id, name, price: parseFloat(price), img, unit });
-    }
+  };
+  document.getElementById('modal-add-btn').onclick = () => {
+    for (let i = 0; i < qty; i++) addToCart({ id, name, price, img, unit });
     closeProductModal();
-  });
+  };
 
-  document.getElementById('product-modal').setAttribute('aria-hidden', 'false');
-  document.getElementById('product-modal').classList.add('open');
+  const modal = document.getElementById('product-modal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 }
 
 function closeProductModal() {
   const modal = document.getElementById('product-modal');
   if (!modal) return;
-  modal.setAttribute('aria-hidden', 'true');
   modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
 }
 
-/* --------------------------------------------------------------------------
-   Products Page: category filter
-   -------------------------------------------------------------------------- */
-function initProductFilter() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const products   = document.querySelectorAll('.product-card');
-  if (!filterBtns.length) return;
+/* ==========================================================
+   NAV
+   ========================================================== */
+function initNav() {
+  const toggle = document.querySelector('.nav-toggle');
+  const nav    = document.querySelector('.site-nav');
+  if (!toggle || !nav) return;
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+}
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-      const category = btn.dataset.filter;
-      products.forEach(card => {
-        card.classList.toggle('hidden', !(category === 'all' || card.dataset.category === category));
-      });
-    });
+function setActiveNav() {
+  const page = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-list a').forEach(a => {
+    if (a.getAttribute('href') === page || (page === '' && a.getAttribute('href') === 'index.html')) {
+      a.classList.add('active');
+      a.setAttribute('aria-current', 'page');
+    }
   });
 }
 
-/* --------------------------------------------------------------------------
-   Gallery Page: lightbox
-   -------------------------------------------------------------------------- */
-function initGalleryLightbox() {
-  const lightbox     = document.getElementById('lightbox');
-  const lbImg        = document.getElementById('lightbox-img');
-  const lbCaption    = document.getElementById('lightbox-caption');
-  const lbClose      = document.getElementById('lightbox-close');
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  if (!lightbox) return;
+/* ==========================================================
+   PRODUCT FILTER
+   ========================================================== */
+function initProductFilter() {
+  const btns     = document.querySelectorAll('.filter-btn');
+  const products = document.querySelectorAll('.product-card');
+  if (!btns.length) return;
+  btns.forEach(btn => btn.addEventListener('click', () => {
+    btns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed','true');
+    const cat = btn.dataset.filter;
+    products.forEach(c => c.classList.toggle('hidden', !(cat === 'all' || c.dataset.category === cat)));
+  }));
+}
 
-  galleryItems.forEach(item => {
+/* ==========================================================
+   GALLERY LIGHTBOX
+   ========================================================== */
+function initGalleryLightbox() {
+  const lb    = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbCap = document.getElementById('lightbox-caption');
+  const lbX   = document.getElementById('lightbox-close');
+  if (!lb) return;
+
+  document.querySelectorAll('.gallery-item').forEach(item => {
     item.addEventListener('click', () => {
       const img = item.querySelector('img');
       lbImg.src = img.src; lbImg.alt = img.alt;
-      lbCaption.textContent = img.alt;
-      lightbox.classList.add('open');
-      lightbox.setAttribute('aria-hidden', 'false');
-      lbClose.focus();
+      lbCap.textContent = img.alt;
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden','false');
+      lbX.focus();
     });
     item.addEventListener('keydown', e => { if (e.key === 'Enter') item.click(); });
   });
 
-  lbClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-
-  function closeLightbox() {
-    lightbox.classList.remove('open');
-    lightbox.setAttribute('aria-hidden', 'true');
-  }
+  lbX.addEventListener('click', closeLB);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLB(); });
+  function closeLB() { lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
 }
 
-/* --------------------------------------------------------------------------
-   Contact Page: form validation
-   -------------------------------------------------------------------------- */
+/* ==========================================================
+   CONTACT FORM VALIDATION
+   ========================================================== */
 function initContactForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
   const fields = {
-    name:    { el: form.querySelector('#name'),    validate: v => v.trim().length >= 2,  msg: 'Please enter your full name (at least 2 characters).' },
-    email:   { el: form.querySelector('#email'),   validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), msg: 'Please enter a valid email address.' },
-    inquiry: { el: form.querySelector('#inquiry'), validate: v => v !== '',              msg: 'Please select an inquiry type.' },
-    message: { el: form.querySelector('#message'), validate: v => v.trim().length >= 10, msg: 'Message must be at least 10 characters.' },
+    name:    { el: form.querySelector('#name'),    fn: v => v.trim().length >= 2,                    msg: 'Please enter your full name (min 2 characters).' },
+    email:   { el: form.querySelector('#email'),   fn: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),   msg: 'Please enter a valid email address.' },
+    inquiry: { el: form.querySelector('#inquiry'), fn: v => v !== '',                                msg: 'Please select an inquiry type.' },
+    message: { el: form.querySelector('#message'), fn: v => v.trim().length >= 10,                  msg: 'Message must be at least 10 characters.' },
   };
 
-  Object.values(fields).forEach(({ el, validate, msg }) => {
+  Object.values(fields).forEach(({ el, fn, msg }) => {
     if (!el) return;
-    const errEl = document.getElementById(el.id + '-error');
-    el.addEventListener('blur',  () => validateField(el, validate, errEl, msg));
-    el.addEventListener('input', () => {
-      if (el.classList.contains('invalid')) validateField(el, validate, errEl, msg);
-    });
+    const err = document.getElementById(el.id + '-error');
+    el.addEventListener('blur',  () => vf(el, fn, err, msg));
+    el.addEventListener('input', () => { if (el.classList.contains('invalid')) vf(el, fn, err, msg); });
   });
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-    let allValid = true;
-    Object.values(fields).forEach(({ el, validate, msg }) => {
+    let ok = true;
+    Object.values(fields).forEach(({ el, fn, msg }) => {
       if (!el) return;
-      const errEl = document.getElementById(el.id + '-error');
-      if (!validateField(el, validate, errEl, msg)) allValid = false;
+      if (!vf(el, fn, document.getElementById(el.id + '-error'), msg)) ok = false;
     });
-    if (allValid) {
+    if (ok) {
       form.style.display = 'none';
       document.getElementById('form-success').classList.add('visible');
     }
   });
 }
 
-function validateField(el, validate, errEl, msg) {
-  const valid = validate(el.value);
-  el.classList.toggle('valid', valid);
+function vf(el, fn, errEl, msg) {
+  const valid = fn(el.value);
+  el.classList.toggle('valid',   valid);
   el.classList.toggle('invalid', !valid);
   if (errEl) { errEl.textContent = msg; errEl.classList.toggle('visible', !valid); }
   return valid;
