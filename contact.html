@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- =====================================================================
+       GreenLeaf Organics - Contact Page
+       ICT726 Web Development Assignment
+       ===================================================================== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Get in touch with GreenLeaf Organics. We'd love to hear from you about orders, products, or delivery." />
+  <title>Contact – GreenLeaf Organics</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- =====================================================================
+       HEADER & NAVIGATION
+       ===================================================================== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+             alt="GreenLeaf Organics logo" width="44" height="44" />
+        GreenLeaf Organics
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="main-nav" role="navigation" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       MAIN CONTENT
+       ===================================================================== -->
+  <main id="main-content">
+
+    <!-- Page Hero -->
+    <section class="page-hero" aria-label="Contact page banner">
+      <div class="container">
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you. Reach out any time.</p>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" aria-labelledby="contact-heading">
+      <div class="container">
+        <h2 class="section-title" id="contact-heading">Get in Touch</h2>
+        <p class="section-subtitle">Questions, feedback, or just want to say hello?</p>
+
+        <div class="contact-grid">
+
+          <!-- ── Contact Information ──────────────────────────────────── -->
+          <aside class="contact-info-card" aria-label="Contact information">
+            <h2>Contact Information</h2>
+
+            <div class="contact-item">
+              <span class="contact-icon" aria-hidden="true">📧</span>
+              <div>
+                <strong>Email</strong>
+                <a href="mailto:hello@greenleaforganics.com">hello@greenleaforganics.com</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-icon" aria-hidden="true">📞</span>
+              <div>
+                <strong>Phone</strong>
+                <a href="tel:+15551234567">(555) 123-4567</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-icon" aria-hidden="true">📍</span>
+              <div>
+                <strong>Address</strong>
+                <span>123 Green Street, Sydney NSW 2000</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-icon" aria-hidden="true">🕐</span>
+              <div>
+                <strong>Business Hours</strong>
+                <span>Mon–Fri: 8am – 6pm<br />Sat: 9am – 2pm<br />Sun: Closed</span>
+              </div>
+            </div>
+
+            <!-- Social Media Links -->
+            <div aria-label="Social media links">
+              <strong style="display:block; color:var(--primary); font-size:0.85rem; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.75rem;">Follow Us</strong>
+              <div class="social-links">
+                <a href="#" class="social-link" aria-label="GreenLeaf Organics on Facebook"
+                   rel="noopener noreferrer">f</a>
+                <a href="#" class="social-link" aria-label="GreenLeaf Organics on Instagram"
+                   rel="noopener noreferrer">&#9679;</a>
+                <a href="#" class="social-link" aria-label="GreenLeaf Organics on Twitter / X"
+                   rel="noopener noreferrer">𝕏</a>
+              </div>
+            </div>
+          </aside>
+
+          <!-- ── Contact Form ───────────────────────────────────────────── -->
+          <div class="contact-form-card">
+            <h2>Send a Message</h2>
+
+            <!-- Form: HTML5 validation + JS validation (see script.js) -->
+            <form id="contact-form" novalidate aria-label="Contact form">
+
+              <!-- Full Name -->
+              <div class="form-group">
+                <label for="name">
+                  Full Name <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input type="text" id="name" name="name"
+                       placeholder="Jane Smith"
+                       required minlength="2"
+                       aria-required="true"
+                       aria-describedby="name-error"
+                       autocomplete="name" />
+                <span id="name-error" class="error-msg" role="alert" aria-live="polite"></span>
+              </div>
+
+              <!-- Email Address -->
+              <div class="form-group">
+                <label for="email">
+                  Email Address <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input type="email" id="email" name="email"
+                       placeholder="jane@example.com"
+                       required
+                       aria-required="true"
+                       aria-describedby="email-error"
+                       autocomplete="email" />
+                <span id="email-error" class="error-msg" role="alert" aria-live="polite"></span>
+              </div>
+
+              <!-- Inquiry Type -->
+              <div class="form-group">
+                <label for="inquiry">
+                  Inquiry Type <span class="required" aria-hidden="true">*</span>
+                </label>
+                <select id="inquiry" name="inquiry"
+                        required
+                        aria-required="true"
+                        aria-describedby="inquiry-error">
+                  <option value="">— Please select —</option>
+                  <option value="order">Order Question</option>
+                  <option value="product">Product Information</option>
+                  <option value="delivery">Delivery Issue</option>
+                  <option value="feedback">Feedback</option>
+                  <option value="other">Other</option>
+                </select>
+                <span id="inquiry-error" class="error-msg" role="alert" aria-live="polite"></span>
+              </div>
+
+              <!-- Subject (optional) -->
+              <div class="form-group">
+                <label for="subject">Subject <span style="color:var(--text-muted); font-weight:400;">(optional)</span></label>
+                <input type="text" id="subject" name="subject"
+                       placeholder="Brief subject line"
+                       autocomplete="off" />
+              </div>
+
+              <!-- Message -->
+              <div class="form-group">
+                <label for="message">
+                  Message <span class="required" aria-hidden="true">*</span>
+                </label>
+                <textarea id="message" name="message"
+                          placeholder="Write your message here (minimum 10 characters)…"
+                          required minlength="10"
+                          aria-required="true"
+                          aria-describedby="message-error"></textarea>
+                <span id="message-error" class="error-msg" role="alert" aria-live="polite"></span>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%;">
+                Send Message
+              </button>
+
+            </form>
+
+            <!-- Success message (shown by JS after valid submission) -->
+            <div id="form-success" class="form-success" role="alert" aria-live="polite">
+              ✅ Thank you! Your message has been sent. We'll get back to you within 1–2 business days.
+            </div>
+
+          </div><!-- /contact-form-card -->
+
+        </div><!-- /contact-grid -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+                 alt="GreenLeaf Organics logo" width="36" height="36" />
+            GreenLeaf Organics
+          </a>
+          <p>Fresh. Organic. Delivered.<br />Serving Sydney since 2018.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <address>
+            123 Green Street<br />Sydney NSW 2000<br />
+            <a href="tel:+15551234567">(555) 123-4567</a><br />
+            <a href="mailto:hello@greenleaforganics.com">hello@greenleaforganics.com</a>
+          </address>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2024 GreenLeaf Organics. All rights reserved. | ICT726 Web Development Assignment</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

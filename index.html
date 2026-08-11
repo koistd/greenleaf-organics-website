@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- =====================================================================
+       GreenLeaf Organics - Home Page
+       ICT726 Web Development Assignment
+       ===================================================================== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="GreenLeaf Organics delivers 100% certified organic produce straight from local Sydney farms to your door. Fresh. Organic. Delivered." />
+  <meta name="keywords" content="organic food delivery, fresh produce, Sydney, organic vegetables, organic fruit" />
+  <meta name="author" content="GreenLeaf Organics" />
+
+  <!-- Open Graph (social sharing) -->
+  <meta property="og:title" content="GreenLeaf Organics – Fresh. Organic. Delivered." />
+  <meta property="og:description" content="Certified organic produce delivered from local Sydney farms to your door." />
+  <meta property="og:type" content="website" />
+
+  <title>GreenLeaf Organics – Fresh. Organic. Delivered.</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- =====================================================================
+       HEADER & NAVIGATION (shared across all pages)
+       ===================================================================== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+
+      <!-- Logo -->
+      <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+             alt="GreenLeaf Organics logo" width="44" height="44" />
+        GreenLeaf Organics
+      </a>
+
+      <!-- Mobile hamburger button -->
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Main navigation -->
+      <nav class="site-nav" id="main-nav" role="navigation" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       MAIN CONTENT
+       ===================================================================== -->
+  <main id="main-content">
+
+    <!-- Hero Section -->
+    <section class="hero" aria-label="Hero banner">
+      <div class="container">
+        <h1>Fresh. Organic. Delivered.</h1>
+        <p>We partner with local Sydney farms to bring certified organic produce straight to your doorstep — harvested today, delivered tomorrow.</p>
+        <a href="products.html" class="btn btn-primary" role="button">Shop Now</a>
+      </div>
+    </section>
+
+    <!-- Feature Cards Section -->
+    <section class="section" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 class="section-title" id="features-heading">Why Choose GreenLeaf?</h2>
+        <p class="section-subtitle">We believe good food starts with good values.</p>
+
+        <div class="grid-3" role="list">
+
+          <article class="feature-card" role="listitem">
+            <span class="feature-icon" aria-hidden="true">🌿</span>
+            <h3>100% Organic</h3>
+            <p>Every product is certified organic — no pesticides, no GMOs, just pure natural goodness.</p>
+          </article>
+
+          <article class="feature-card" role="listitem">
+            <span class="feature-icon" aria-hidden="true">🚜</span>
+            <h3>Local Farms</h3>
+            <p>We source exclusively from trusted family farms within 200 km of Sydney, supporting our community.</p>
+          </article>
+
+          <article class="feature-card" role="listitem">
+            <span class="feature-icon" aria-hidden="true">🚚</span>
+            <h3>Fresh Delivery</h3>
+            <p>Same-day and next-day delivery options available. Your produce arrives fresh, never frozen.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="section section--alt" aria-labelledby="featured-heading">
+      <div class="container">
+        <h2 class="section-title" id="featured-heading">Featured Products</h2>
+        <p class="section-subtitle">Handpicked favourites from this week's harvest.</p>
+
+        <div class="product-grid">
+
+          <!-- Product 1 -->
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=250&h=200&fit=crop"
+                   alt="Fresh organic strawberries" width="250" height="200" loading="lazy" />
+            </div>
+            <div class="product-info">
+              <span class="product-category-badge">Fruits</span>
+              <h3>Organic Strawberries</h3>
+              <p class="product-desc">Sweet, sun-ripened strawberries from the Southern Highlands.</p>
+              <div class="product-footer">
+                <span class="product-price">$6.99 / punnet</span>
+                <a href="products.html" class="btn btn-outline" aria-label="View Organic Strawberries">View</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 2 -->
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=250&h=200&fit=crop"
+                   alt="Fresh organic baby spinach" width="250" height="200" loading="lazy" />
+            </div>
+            <div class="product-info">
+              <span class="product-category-badge">Vegetables</span>
+              <h3>Baby Spinach</h3>
+              <p class="product-desc">Tender, nutrient-rich baby spinach leaves, harvested fresh daily.</p>
+              <div class="product-footer">
+                <span class="product-price">$4.50 / bag</span>
+                <a href="products.html" class="btn btn-outline" aria-label="View Baby Spinach">View</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 3 -->
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=250&h=200&fit=crop"
+                   alt="Raw organic wildflower honey" width="250" height="200" loading="lazy" />
+            </div>
+            <div class="product-info">
+              <span class="product-category-badge">Pantry</span>
+              <h3>Raw Wildflower Honey</h3>
+              <p class="product-desc">Unfiltered, unheated honey from free-range hives in the Blue Mountains.</p>
+              <div class="product-footer">
+                <span class="product-price">$12.00 / jar</span>
+                <a href="products.html" class="btn btn-outline" aria-label="View Raw Wildflower Honey">View</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="text-center" style="margin-top:2.5rem;">
+          <a href="products.html" class="btn btn-primary">Browse All Products</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call-to-Action Banner -->
+    <section class="section" aria-labelledby="cta-heading">
+      <div class="container text-center">
+        <h2 id="cta-heading">Ready to eat better?</h2>
+        <p style="color:var(--text-muted); max-width:500px; margin:0 auto 2rem;">
+          Join thousands of Sydney families who trust GreenLeaf Organics for their weekly produce.
+        </p>
+        <a href="contact.html" class="btn btn-primary">Get in Touch</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       FOOTER (shared across all pages)
+       ===================================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Brand column -->
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+                 alt="GreenLeaf Organics logo" width="36" height="36" />
+            GreenLeaf Organics
+          </a>
+          <p>Fresh. Organic. Delivered.<br />Serving Sydney since 2018.</p>
+        </div>
+
+        <!-- Quick links -->
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact info -->
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <address>
+            123 Green Street<br />
+            Sydney NSW 2000<br />
+            <a href="tel:+15551234567">(555) 123-4567</a><br />
+            <a href="mailto:hello@greenleaforganics.com">hello@greenleaforganics.com</a>
+          </address>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2024 GreenLeaf Organics. All rights reserved. | ICT726 Web Development Assignment</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- =====================================================================
+       GreenLeaf Organics - Gallery Page
+       ICT726 Web Development Assignment
+       ===================================================================== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse the GreenLeaf Organics photo gallery – our farms, produce, and team in action." />
+  <title>Gallery – GreenLeaf Organics</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- =====================================================================
+       HEADER & NAVIGATION
+       ===================================================================== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+             alt="GreenLeaf Organics logo" width="44" height="44" />
+        GreenLeaf Organics
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="main-nav" role="navigation" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       MAIN CONTENT
+       ===================================================================== -->
+  <main id="main-content">
+
+    <!-- Page Hero -->
+    <section class="page-hero" aria-label="Gallery page banner">
+      <div class="container">
+        <h1>Our Gallery</h1>
+        <p>A glimpse into our farms, produce, and the people who make it all happen.</p>
+      </div>
+    </section>
+
+    <!-- Gallery Grid Section -->
+    <section class="section" aria-labelledby="gallery-heading">
+      <div class="container">
+        <h2 class="section-title" id="gallery-heading">Farm to Table</h2>
+        <p class="section-subtitle">Click any image to enlarge.</p>
+
+        <!-- Gallery grid – each item is a button for keyboard accessibility -->
+        <div class="gallery-grid" role="list" aria-label="Photo gallery">
+
+          <div class="gallery-item" role="listitem" tabindex="0"
+               aria-label="Click to enlarge: Morning harvest at sunrise on a local farm">
+            <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400&h=300&fit=crop"
+                 alt="Morning harvest at sunrise on a local organic farm" width="400" height="300" loading="lazy" />
+            <div class="gallery-overlay" aria-hidden="true">🔍 Click to enlarge</div>
+          </div>
+
+          <div class="gallery-item" role="listitem" tabindex="0"
+               aria-label="Click to enlarge: Colourful fresh vegetables at the market">
+            <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=300&fit=crop"
+                 alt="Colourful array of fresh organic vegetables at the farmers market" width="400" height="300" loading="lazy" />
+            <div class="gallery-overlay" aria-hidden="true">🔍 Click to enlarge</div>
+          </div>
+
+          <div class="gallery-item" role="listitem" tabindex="0"
+               aria-label="Click to enlarge: Delivery boxes packed with organic produce">
+            <img src="https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?w=400&h=300&fit=crop"
+                 alt="GreenLeaf Organics delivery boxes packed with fresh organic produce" width="400" height="300" loading="lazy" />
+            <div class="gallery-overlay" aria-hidden="true">🔍 Click to enlarge</div>
+          </div>
+
+          <div class="gallery-item" role="listitem" tabindex="0"
+               aria-label="Click to enlarge: Strawberry fields in the Southern Highlands">
+            <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&h=300&fit=crop"
+                 alt="Rows of organic strawberry plants in the Southern Highlands" width="400" height="300" loading="lazy" />
+            <div class="gallery-overlay" aria-hidden="true">🔍 Click to enlarge</div>
+          </div>
+
+          <div class="gallery-item" role="listitem" tabindex="0"
+               aria-label="Click to enlarge: Team members sorting produce in the warehouse">
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop"
+                 alt="GreenLeaf Organics team members sorting and packing fresh produce" width="400" height="300" loading="lazy" />
+            <div class="gallery-overlay" aria-hidden="true">🔍 Click to enlarge</div>
+          </div>
+
+          <div class="gallery-item" role="listitem" tabindex="0"
+               aria-label="Click to enlarge: Beehives in the Blue Mountains">
+            <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=300&fit=crop"
+                 alt="Organic beehives nestled among wildflowers in the Blue Mountains" width="400" height="300" loading="lazy" />
+            <div class="gallery-overlay" aria-hidden="true">🔍 Click to enlarge</div>
+          </div>
+
+        </div><!-- /gallery-grid -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       LIGHTBOX MODAL
+       Opened by JavaScript when a gallery item is clicked.
+       aria-hidden toggled by JS.
+       ===================================================================== -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true"
+       aria-label="Image lightbox" aria-hidden="true">
+    <div class="lightbox-content">
+      <button id="lightbox-close" class="lightbox-close" aria-label="Close lightbox">&times;</button>
+      <img id="lightbox-img" src="" alt="" />
+      <p id="lightbox-caption" class="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+                 alt="GreenLeaf Organics logo" width="36" height="36" />
+            GreenLeaf Organics
+          </a>
+          <p>Fresh. Organic. Delivered.<br />Serving Sydney since 2018.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <address>
+            123 Green Street<br />Sydney NSW 2000<br />
+            <a href="tel:+15551234567">(555) 123-4567</a><br />
+            <a href="mailto:hello@greenleaforganics.com">hello@greenleaforganics.com</a>
+          </address>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2024 GreenLeaf Organics. All rights reserved. | ICT726 Web Development Assignment</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
