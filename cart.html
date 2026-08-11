@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- =====================================================================
+       GreenLeaf Organics - Cart Page
+       ICT726 Web Development Assignment
+       ===================================================================== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Your GreenLeaf Organics shopping cart. Review your items and proceed to checkout." />
+  <title>Your Cart – GreenLeaf Organics</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Cart Page Specific Styles ── */
+    .cart-page-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* Cart items table */
+    .cart-table {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .cart-table-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: var(--light-bg);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      border-bottom: 2px solid var(--border);
+    }
+    .cart-table-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+    .cart-table-row:last-child { border-bottom: none; }
+    .cart-table-row:hover { background: #fafffe; }
+
+    .cart-product-cell {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .cart-product-cell img {
+      width: 72px; height: 72px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .cart-product-name { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+    .cart-product-unit { font-size: 0.8rem; color: var(--text-muted); }
+
+    .cart-cell-price  { font-weight: 600; color: var(--text); }
+    .cart-cell-total  { font-weight: 700; color: var(--primary); font-size: 1.05rem; }
+
+    .cart-qty-cell .qty-controls { justify-content: flex-start; }
+
+    .cart-remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #e53935;
+      font-size: 1.2rem;
+      padding: 0.25rem;
+      border-radius: 50%;
+      transition: background var(--transition), transform var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cart-remove-btn:hover { background: #ffebee; transform: scale(1.15); }
+
+    /* Empty cart state */
+    .cart-empty-page {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--text-muted);
+    }
+    .cart-empty-page .empty-icon { font-size: 5rem; margin-bottom: 1rem; display: block; }
+    .cart-empty-page h2 { color: var(--text-muted); margin-bottom: 0.5rem; }
+
+    /* Order summary card */
+    .order-summary {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 1.75rem;
+      position: sticky;
+      top: 90px;
+    }
+    .order-summary h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .summary-row.total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+      border-top: 2px solid var(--border);
+    }
+    .delivery-badge {
+      background: #e8f5e9;
+      color: var(--primary);
+      border-radius: var(--radius);
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    .promo-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .promo-row input {
+      flex: 1;
+      padding: 0.6rem 0.9rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+    }
+    .promo-row input:focus { outline: none; border-color: var(--primary-light); }
+    .promo-row button {
+      padding: 0.6rem 1rem;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background var(--transition);
+    }
+    .promo-row button:hover { background: var(--primary-light); }
+
+    /* Checkout form */
+    .checkout-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    .checkout-section h2 { font-size: 1.3rem; margin-bottom: 1.5rem; }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .checkout-grid .full-width { grid-column: 1 / -1; }
+
+    .checkout-success {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--light-bg);
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--primary-light);
+    }
+    .checkout-success .success-icon { font-size: 4rem; display: block; margin-bottom: 1rem; }
+    .checkout-success h2 { color: var(--primary); margin-bottom: 0.5rem; }
+    .checkout-success p  { color: var(--text-muted); }
+
+    @media (max-width: 900px) {
+      .cart-page-grid { grid-template-columns: 1fr; }
+      .order-summary  { position: static; }
+      .cart-table-header,
+      .cart-table-row { grid-template-columns: 2fr 1fr 1fr 40px; }
+      .cart-table-header span:nth-child(3),
+      .cart-table-row .cart-qty-cell { display: none; }
+    }
+    @media (max-width: 600px) {
+      .cart-table-header { display: none; }
+      .cart-table-row {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 0.5rem;
+      }
+      .cart-product-cell { grid-column: 1; }
+      .cart-remove-btn   { grid-column: 2; grid-row: 1; }
+      .cart-qty-cell     { grid-column: 1; display: block; }
+      .cart-cell-price,
+      .cart-cell-total   { display: none; }
+      .checkout-grid     { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =====================================================================
+       HEADER & NAVIGATION
+       ===================================================================== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+             alt="GreenLeaf Organics logo" width="44" height="44" />
+        GreenLeaf Organics
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="main-nav" role="navigation" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       MAIN CONTENT
+       ===================================================================== -->
+  <main id="main-content">
+
+    <section class="page-hero" aria-label="Cart page banner">
+      <div class="container">
+        <h1>🛒 Your Cart</h1>
+        <p>Review your items and complete your order below.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="cart-page-heading">
+      <div class="container">
+        <h2 class="section-title" id="cart-page-heading" style="display:none"></h2>
+
+        <!-- Empty state (shown when cart is empty) -->
+        <div id="cart-page-empty" class="cart-empty-page" style="display:none">
+          <span class="empty-icon">🛒</span>
+          <h2>Your cart is empty</h2>
+          <p>Looks like you haven't added anything yet.</p>
+          <a href="products.html" class="btn btn-primary" style="margin-top:1.5rem">Browse Products</a>
+        </div>
+
+        <!-- Cart content (shown when cart has items) -->
+        <div id="cart-page-content">
+
+          <div class="cart-page-grid">
+
+            <!-- Left: Cart Items Table -->
+            <div>
+              <div class="cart-table" id="cart-page-table">
+                <div class="cart-table-header">
+                  <span>Product</span>
+                  <span>Price</span>
+                  <span>Quantity</span>
+                  <span>Total</span>
+                  <span></span>
+                </div>
+                <div id="cart-page-rows">
+                  <!-- Rows injected by JS -->
+                </div>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; margin-top:1rem; flex-wrap:wrap; gap:0.75rem;">
+                <a href="products.html" class="btn btn-outline">← Continue Shopping</a>
+                <button class="btn btn-outline" id="page-clear-cart" style="border-color:#e53935;color:#e53935;">
+                  🗑 Clear Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div>
+              <div class="order-summary">
+                <h2>Order Summary</h2>
+
+                <div class="summary-row">
+                  <span>Items (<span id="summary-count">0</span>)</span>
+                  <span id="summary-subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                  <span>Delivery</span>
+                  <span id="summary-delivery">$5.99</span>
+                </div>
+
+                <div class="delivery-badge" id="summary-delivery-note">
+                  🚚 Free delivery on orders over $50
+                </div>
+
+                <div class="promo-row">
+                  <input type="text" id="promo-input" placeholder="Promo code" aria-label="Enter promo code" />
+                  <button onclick="applyPromo()">Apply</button>
+                </div>
+                <div id="promo-msg" style="font-size:0.82rem;margin-bottom:0.75rem;display:none;"></div>
+
+                <div class="summary-row total">
+                  <span>Total</span>
+                  <span id="summary-total">$0.00</span>
+                </div>
+
+                <button class="btn btn-primary" style="width:100%;margin-top:1rem;font-size:1.05rem;"
+                        id="page-checkout-btn">
+                  Proceed to Checkout →
+                </button>
+                <p style="font-size:0.78rem;color:var(--text-muted);text-align:center;margin-top:0.75rem;">
+                  🔒 Secure checkout &nbsp;|&nbsp; 🌿 Organic guaranteed
+                </p>
+              </div>
+            </div>
+
+          </div><!-- /cart-page-grid -->
+
+          <!-- Checkout Form -->
+          <div class="checkout-section" id="checkout-form-section">
+            <h2>Delivery Details</h2>
+            <form id="checkout-form" novalidate>
+              <div class="checkout-grid">
+                <div class="form-group">
+                  <label for="co-fname">First Name <span class="required" aria-hidden="true">*</span></label>
+                  <input type="text" id="co-fname" required placeholder="Jane" autocomplete="given-name" />
+                </div>
+                <div class="form-group">
+                  <label for="co-lname">Last Name <span class="required" aria-hidden="true">*</span></label>
+                  <input type="text" id="co-lname" required placeholder="Smith" autocomplete="family-name" />
+                </div>
+                <div class="form-group">
+                  <label for="co-email">Email <span class="required" aria-hidden="true">*</span></label>
+                  <input type="email" id="co-email" required placeholder="jane@example.com" autocomplete="email" />
+                </div>
+                <div class="form-group">
+                  <label for="co-phone">Phone <span class="required" aria-hidden="true">*</span></label>
+                  <input type="tel" id="co-phone" required placeholder="04XX XXX XXX" autocomplete="tel" />
+                </div>
+                <div class="form-group full-width">
+                  <label for="co-address">Delivery Address <span class="required" aria-hidden="true">*</span></label>
+                  <input type="text" id="co-address" required placeholder="123 Example Street, Sydney NSW 2000" autocomplete="street-address" />
+                </div>
+                <div class="form-group">
+                  <label for="co-delivery">Delivery Option</label>
+                  <select id="co-delivery">
+                    <option value="standard">Standard (Next Day) – $5.99</option>
+                    <option value="express">Express (Same Day) – $12.99</option>
+                    <option value="free">Free Delivery (Orders $50+)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="co-payment">Payment Method</label>
+                  <select id="co-payment">
+                    <option value="card">Credit / Debit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="afterpay">Afterpay</option>
+                  </select>
+                </div>
+                <div class="form-group full-width">
+                  <label for="co-notes">Delivery Notes (optional)</label>
+                  <input type="text" id="co-notes" placeholder="Leave at door, ring bell, etc." />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;font-size:1.1rem;padding:1rem;">
+                🛒 Place Order
+              </button>
+            </form>
+          </div>
+
+          <!-- Order success message -->
+          <div class="checkout-success" id="checkout-success">
+            <span class="success-icon">🎉</span>
+            <h2>Order Placed Successfully!</h2>
+            <p>Thank you for your order. You'll receive a confirmation email shortly.</p>
+            <p style="margin-top:0.5rem;">Our team will have your fresh organic produce delivered tomorrow morning.</p>
+            <a href="products.html" class="btn btn-primary" style="margin-top:1.5rem">Continue Shopping</a>
+          </div>
+
+        </div><!-- /cart-page-content -->
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
+            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=60&h=60&fit=crop"
+                 alt="GreenLeaf Organics logo" width="36" height="36" />
+            GreenLeaf Organics
+          </a>
+          <p>Fresh. Organic. Delivered.<br />Serving Sydney since 2018.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <address>
+            123 Green Street<br />Sydney NSW 2000<br />
+            <a href="tel:+15551234567">(555) 123-4567</a><br />
+            <a href="mailto:hello@greenleaforganics.com">hello@greenleaforganics.com</a>
+          </address>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2024 GreenLeaf Organics. All rights reserved. | ICT726 Web Development Assignment</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ── Cart Page Logic ── */
+    let discount = 0;
+
+    function renderCartPage() {
+      const rows      = document.getElementById('cart-page-rows');
+      const emptyEl   = document.getElementById('cart-page-empty');
+      const contentEl = document.getElementById('cart-page-content');
+
+      if (!rows) return;
+
+      if (cart.length === 0) {
+        emptyEl.style.display   = 'block';
+        contentEl.style.display = 'none';
+        return;
+      }
+
+      emptyEl.style.display   = 'none';
+      contentEl.style.display = 'block';
+
+      rows.innerHTML = cart.map(item => `
+        <div class="cart-table-row">
+          <div class="cart-product-cell">
+            <img src="${item.img}" alt="${item.name}" />
+            <div>
+              <p class="cart-product-name">${item.name}</p>
+              <p class="cart-product-unit">${item.unit}</p>
+            </div>
+          </div>
+          <div class="cart-cell-price">$${item.price.toFixed(2)}</div>
+          <div class="cart-qty-cell">
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="pageChangeQty('${item.id}',-1)" aria-label="Decrease">−</button>
+              <span class="qty-value">${item.qty}</span>
+              <button class="qty-btn" onclick="pageChangeQty('${item.id}',1)"  aria-label="Increase">+</button>
+            </div>
+          </div>
+          <div class="cart-cell-total">$${(item.price * item.qty).toFixed(2)}</div>
+          <button class="cart-remove-btn" onclick="pageRemove('${item.id}')" aria-label="Remove ${item.name}">✕</button>
+        </div>`).join('');
+
+      updateSummary();
+    }
+
+    function pageChangeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+      saveCart();
+      updateCartBadge();
+      renderCartPage();
+    }
+
+    function pageRemove(id) {
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+      updateCartBadge();
+      renderCartPage();
+    }
+
+    function updateSummary() {
+      const subtotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const itemCount = cart.reduce((s, i) => s + i.qty, 0);
+      const delivery  = subtotal >= 50 ? 0 : 5.99;
+      const total     = subtotal + delivery - discount;
+
+      document.getElementById('summary-count').textContent    = itemCount;
+      document.getElementById('summary-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('summary-delivery').textContent = delivery === 0 ? 'FREE' : `$${delivery.toFixed(2)}`;
+      document.getElementById('summary-total').textContent    = `$${Math.max(0, total).toFixed(2)}`;
+
+      const note = document.getElementById('summary-delivery-note');
+      note.textContent = delivery === 0
+        ? '✅ Free delivery applied!'
+        : `🚚 Add $${(50 - subtotal).toFixed(2)} more for free delivery`;
+    }
+
+    function applyPromo() {
+      const code  = document.getElementById('promo-input').value.trim().toUpperCase();
+      const msgEl = document.getElementById('promo-msg');
+      msgEl.style.display = 'block';
+      if (code === 'GREEN10') {
+        discount = cart.reduce((s, i) => s + i.price * i.qty, 0) * 0.10;
+        msgEl.style.color = 'var(--primary)';
+        msgEl.textContent = '✅ 10% discount applied!';
+      } else if (code === 'ORGANIC5') {
+        discount = 5;
+        msgEl.style.color = 'var(--primary)';
+        msgEl.textContent = '✅ $5 discount applied!';
+      } else {
+        discount = 0;
+        msgEl.style.color = '#c62828';
+        msgEl.textContent = '❌ Invalid promo code.';
+      }
+      updateSummary();
+    }
+
+    // Clear cart button on page
+    document.getElementById('page-clear-cart')?.addEventListener('click', () => {
+      cart = []; saveCart(); updateCartBadge(); renderCartPage();
+    });
+
+    // Checkout form submit
+    document.getElementById('checkout-form')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const required = ['co-fname','co-lname','co-email','co-phone','co-address'];
+      let valid = true;
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.classList.add('invalid'); valid = false; }
+        else el.classList.remove('invalid');
+      });
+      if (!valid) return;
+
+      // Success
+      document.getElementById('checkout-form-section').style.display = 'none';
+      document.getElementById('checkout-success').style.display = 'block';
+      cart = []; saveCart(); updateCartBadge();
+      renderCartPage();
+    });
+
+    // Scroll to checkout form
+    document.getElementById('page-checkout-btn')?.addEventListener('click', () => {
+      document.getElementById('checkout-form-section').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Initial render
+    renderCartPage();
+  </script>
+</body>
+</html>

@@ -109,7 +109,9 @@ function injectCartUI() {
             <span id="cart-total">$0.00</span>
           </div>
           <p class="cart-delivery-note">🚚 Free delivery on orders over $50</p>
-          <button class="btn btn-primary" style="width:100%;margin-top:0.5rem"
+          <a href="cart.html" class="btn btn-outline" style="width:100%;margin-top:0.5rem;text-align:center;display:block"
+             onclick="closeCart()">View Full Cart</a>
+          <button class="btn btn-primary" style="width:100%;margin-top:0.75rem"
                   id="checkout-btn">Proceed to Checkout</button>
           <button class="btn btn-outline" style="width:100%;margin-top:0.75rem"
                   id="clear-cart-btn">Clear Cart</button>
@@ -376,7 +378,7 @@ function openProductModal(card) {
   });
 
   document.getElementById('product-modal').setAttribute('aria-hidden', 'false');
-  document.getElementById('product-modal').style.display = 'flex';
+  document.getElementById('product-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
@@ -384,7 +386,7 @@ function closeProductModal() {
   const modal = document.getElementById('product-modal');
   if (!modal) return;
   modal.setAttribute('aria-hidden', 'true');
-  modal.style.display = 'none';
+  modal.classList.remove('open');
   document.body.style.overflow = '';
 }
 
