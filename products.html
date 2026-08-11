@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- =====================================================================
-       GreenLeaf Organics - Products Page
-       ICT726 Web Development Assignment
-       ===================================================================== -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Browse GreenLeaf Organics' full range of certified organic fruits, vegetables, and pantry staples. Delivered fresh to your Sydney door." />
@@ -13,9 +9,6 @@
 </head>
 <body>
 
-  <!-- =====================================================================
-       HEADER & NAVIGATION
-       ===================================================================== -->
   <header class="site-header" role="banner">
     <div class="header-inner">
       <a href="index.html" class="logo" aria-label="GreenLeaf Organics – Home">
@@ -38,12 +31,8 @@
     </div>
   </header>
 
-  <!-- =====================================================================
-       MAIN CONTENT
-       ===================================================================== -->
   <main id="main-content">
 
-    <!-- Page Hero -->
     <section class="page-hero" aria-label="Products page banner">
       <div class="container">
         <h1>Our Products</h1>
@@ -51,29 +40,27 @@
       </div>
     </section>
 
-    <!-- Products Section -->
     <section class="section" aria-labelledby="products-heading">
       <div class="container">
         <h2 class="section-title" id="products-heading">Shop Organic</h2>
-        <p class="section-subtitle">Use the filters below to browse by category.</p>
+        <p class="section-subtitle">Click any product for details. Use filters to browse by category.</p>
 
-        <!-- Category Filter Buttons -->
         <div class="filter-bar" role="group" aria-label="Filter products by category">
           <button class="filter-btn active" data-filter="all"        aria-pressed="true">All</button>
-          <button class="filter-btn"        data-filter="fruits"     aria-pressed="false">Fruits</button>
-          <button class="filter-btn"        data-filter="vegetables" aria-pressed="false">Vegetables</button>
-          <button class="filter-btn"        data-filter="pantry"     aria-pressed="false">Pantry</button>
+          <button class="filter-btn"        data-filter="fruits"     aria-pressed="false">🍓 Fruits</button>
+          <button class="filter-btn"        data-filter="vegetables" aria-pressed="false">🥦 Vegetables</button>
+          <button class="filter-btn"        data-filter="pantry"     aria-pressed="false">🍯 Pantry</button>
         </div>
 
-        <!-- Product Grid -->
         <div class="product-grid" role="list" aria-label="Product listings">
 
-          <!-- ── FRUITS ─────────────────────────────────────────────────── -->
-
-          <article class="product-card" data-category="fruits" role="listitem">
+          <!-- ── FRUITS ── -->
+          <article class="product-card" data-category="fruits" role="listitem"
+                   data-id="strawberries" data-price="6.99" data-unit="/ punnet"
+                   data-details="<strong>Origin:</strong> Southern Highlands, NSW<br><strong>Weight:</strong> 250g punnet<br><strong>Shelf life:</strong> 3–5 days refrigerated<br><strong>Certification:</strong> ACO Certified Organic">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=250&h=200&fit=crop"
-                   alt="Organic strawberries" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&h=300&fit=crop"
+                   alt="Organic strawberries" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Fruits</span>
@@ -81,15 +68,17 @@
               <p class="product-desc">Sun-ripened, sweet strawberries from the Southern Highlands. Perfect for snacking or desserts.</p>
               <div class="product-footer">
                 <span class="product-price">$6.99 / punnet</span>
-                <button class="btn btn-primary" aria-label="Add Organic Strawberries to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Organic Strawberries to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="fruits" role="listitem">
+          <article class="product-card" data-category="fruits" role="listitem"
+                   data-id="blueberries" data-price="8.50" data-unit="/ punnet"
+                   data-details="<strong>Origin:</strong> Hunter Valley, NSW<br><strong>Weight:</strong> 200g punnet<br><strong>Shelf life:</strong> 5–7 days refrigerated<br><strong>Certification:</strong> ACO Certified Organic">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=250&h=200&fit=crop"
-                   alt="Organic blueberries" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=400&h=300&fit=crop"
+                   alt="Organic blueberries" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Fruits</span>
@@ -97,15 +86,17 @@
               <p class="product-desc">Plump, antioxidant-rich blueberries grown without pesticides in the Hunter Valley.</p>
               <div class="product-footer">
                 <span class="product-price">$8.50 / punnet</span>
-                <button class="btn btn-primary" aria-label="Add Organic Blueberries to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Organic Blueberries to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="fruits" role="listitem">
+          <article class="product-card" data-category="fruits" role="listitem"
+                   data-id="apples" data-price="5.99" data-unit="/ kg"
+                   data-details="<strong>Origin:</strong> Orange, NSW<br><strong>Weight:</strong> 1 kg bag<br><strong>Shelf life:</strong> 2–3 weeks refrigerated<br><strong>Certification:</strong> ACO Certified Organic">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=250&h=200&fit=crop"
-                   alt="Organic Pink Lady apples" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=400&h=300&fit=crop"
+                   alt="Organic Pink Lady apples" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Fruits</span>
@@ -113,17 +104,18 @@
               <p class="product-desc">Crisp, sweet-tart Pink Lady apples from certified organic orchards in Orange, NSW.</p>
               <div class="product-footer">
                 <span class="product-price">$5.99 / kg</span>
-                <button class="btn btn-primary" aria-label="Add Pink Lady Apples to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Pink Lady Apples to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <!-- ── VEGETABLES ─────────────────────────────────────────────── -->
-
-          <article class="product-card" data-category="vegetables" role="listitem">
+          <!-- ── VEGETABLES ── -->
+          <article class="product-card" data-category="vegetables" role="listitem"
+                   data-id="spinach" data-price="4.50" data-unit="/ bag"
+                   data-details="<strong>Origin:</strong> Hawkesbury, NSW<br><strong>Weight:</strong> 120g bag<br><strong>Shelf life:</strong> 4–5 days refrigerated<br><strong>Certification:</strong> ACO Certified Organic">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=250&h=200&fit=crop"
-                   alt="Organic baby spinach" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop"
+                   alt="Organic baby spinach" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Vegetables</span>
@@ -131,15 +123,17 @@
               <p class="product-desc">Tender, nutrient-dense baby spinach leaves. Harvested fresh each morning.</p>
               <div class="product-footer">
                 <span class="product-price">$4.50 / bag</span>
-                <button class="btn btn-primary" aria-label="Add Baby Spinach to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Baby Spinach to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="vegetables" role="listitem">
+          <article class="product-card" data-category="vegetables" role="listitem"
+                   data-id="carrots" data-price="3.99" data-unit="/ bunch"
+                   data-details="<strong>Origin:</strong> Camden, NSW<br><strong>Weight:</strong> ~500g bunch<br><strong>Shelf life:</strong> 1–2 weeks refrigerated<br><strong>Certification:</strong> ACO Certified Organic">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=250&h=200&fit=crop"
-                   alt="Organic heirloom carrots" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&h=300&fit=crop"
+                   alt="Organic heirloom carrots" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Vegetables</span>
@@ -147,15 +141,17 @@
               <p class="product-desc">A colourful mix of purple, orange, and yellow heirloom carrots — sweet and earthy.</p>
               <div class="product-footer">
                 <span class="product-price">$3.99 / bunch</span>
-                <button class="btn btn-primary" aria-label="Add Heirloom Carrots to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Heirloom Carrots to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="vegetables" role="listitem">
+          <article class="product-card" data-category="vegetables" role="listitem"
+                   data-id="broccoli" data-price="3.50" data-unit="/ head"
+                   data-details="<strong>Origin:</strong> Hawkesbury, NSW<br><strong>Weight:</strong> ~400g head<br><strong>Shelf life:</strong> 5–7 days refrigerated<br><strong>Certification:</strong> ACO Certified Organic">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=250&h=200&fit=crop"
-                   alt="Organic broccoli" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400&h=300&fit=crop"
+                   alt="Organic broccoli" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Vegetables</span>
@@ -163,17 +159,18 @@
               <p class="product-desc">Dense, dark-green broccoli heads packed with vitamins. Grown in the Hawkesbury region.</p>
               <div class="product-footer">
                 <span class="product-price">$3.50 / head</span>
-                <button class="btn btn-primary" aria-label="Add Organic Broccoli to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Organic Broccoli to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <!-- ── PANTRY ─────────────────────────────────────────────────── -->
-
-          <article class="product-card" data-category="pantry" role="listitem">
+          <!-- ── PANTRY ── -->
+          <article class="product-card" data-category="pantry" role="listitem"
+                   data-id="honey" data-price="12.00" data-unit="/ jar"
+                   data-details="<strong>Origin:</strong> Blue Mountains, NSW<br><strong>Weight:</strong> 500g jar<br><strong>Shelf life:</strong> 2+ years<br><strong>Certification:</strong> ACO Certified Organic<br><strong>Notes:</strong> Raw, unfiltered, unheated">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=250&h=200&fit=crop"
-                   alt="Raw organic wildflower honey" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=300&fit=crop"
+                   alt="Raw organic wildflower honey" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Pantry</span>
@@ -181,15 +178,17 @@
               <p class="product-desc">Unfiltered, unheated honey from free-range hives in the Blue Mountains. Rich and complex.</p>
               <div class="product-footer">
                 <span class="product-price">$12.00 / jar</span>
-                <button class="btn btn-primary" aria-label="Add Raw Wildflower Honey to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Raw Wildflower Honey to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="pantry" role="listitem">
+          <article class="product-card" data-category="pantry" role="listitem"
+                   data-id="oats" data-price="7.00" data-unit="/ 500g"
+                   data-details="<strong>Origin:</strong> Riverina, NSW<br><strong>Weight:</strong> 500g bag<br><strong>Shelf life:</strong> 12 months<br><strong>Certification:</strong> ACO Certified Organic<br><strong>Notes:</strong> Stone-milled, gluten-free facility">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1614961233913-a5113a4a34ed?w=250&h=200&fit=crop"
-                   alt="Organic rolled oats" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1614961233913-a5113a4a34ed?w=400&h=300&fit=crop"
+                   alt="Organic rolled oats" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Pantry</span>
@@ -197,15 +196,17 @@
               <p class="product-desc">Stone-milled, certified organic rolled oats. Perfect for porridge, granola, or baking.</p>
               <div class="product-footer">
                 <span class="product-price">$7.00 / 500g</span>
-                <button class="btn btn-primary" aria-label="Add Organic Rolled Oats to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Organic Rolled Oats to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="pantry" role="listitem">
+          <article class="product-card" data-category="pantry" role="listitem"
+                   data-id="oliveoil" data-price="18.00" data-unit="/ 500ml"
+                   data-details="<strong>Origin:</strong> Hunter Valley, NSW<br><strong>Volume:</strong> 500ml bottle<br><strong>Shelf life:</strong> 18 months<br><strong>Certification:</strong> ACO Certified Organic<br><strong>Notes:</strong> Cold-pressed, first extraction">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=250&h=200&fit=crop"
-                   alt="Cold-pressed organic extra virgin olive oil" width="250" height="200" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&h=300&fit=crop"
+                   alt="Cold-pressed organic extra virgin olive oil" width="400" height="300" loading="lazy" />
             </div>
             <div class="product-info">
               <span class="product-category-badge">Pantry</span>
@@ -213,20 +214,17 @@
               <p class="product-desc">Cold-pressed from hand-harvested olives grown on a family estate in the Hunter Valley.</p>
               <div class="product-footer">
                 <span class="product-price">$18.00 / 500ml</span>
-                <button class="btn btn-primary" aria-label="Add Extra Virgin Olive Oil to cart">Add to Cart</button>
+                <button class="btn btn-primary btn-add-to-cart" aria-label="Add Extra Virgin Olive Oil to cart">Add to Cart</button>
               </div>
             </div>
           </article>
 
-        </div><!-- /product-grid -->
+        </div>
       </div>
     </section>
 
   </main>
 
-  <!-- =====================================================================
-       FOOTER
-       ===================================================================== -->
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <div class="footer-grid">
